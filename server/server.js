@@ -2,13 +2,13 @@ const express = require('express');
 const path = require('path');
 const rti = require('rticonnextdds-connector');
 const app = express();
-const configFile = path.join(__dirname, 'ShapeExample.xml');
+const configFile = path.join(__dirname, 'queue_system.xml');
 
 const data = []; // Moved outside the function to ensure it is accessible
 
 const run = async () => {
-  const connector = new rti.Connector('MyParticipantLibrary::MySubParticipant', configFile);
-  const input = connector.getInput('MySubscriber::MySquareReader');
+  const connector = new rti.Connector('MyParticipantLibrary::QueueParticipant', configFile);
+  const input = connector.getInput('QueueMessageSubscriber::QueueMessageReader');
   try {
     console.log('Waiting for publications...');
     await input.waitForPublications();
@@ -21,10 +21,9 @@ const run = async () => {
         const jsonData = sample.getJson();
         console.log('Received data: ' + JSON.stringify(jsonData));
         data.push({
-          x: jsonData.x,
-          y: jsonData.y,
-          shapesize: jsonData.shapesize,
-          color: jsonData.color
+          fromDevice: jsonData.fromDevic,
+          toDevice: jsonData.toDevice,
+          message: jsonData.message
         });
       }
     }
