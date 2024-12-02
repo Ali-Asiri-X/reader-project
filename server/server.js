@@ -19,6 +19,7 @@ const run = async () => {
       input.take();
       for (const sample of input.samples.validDataIter) {
         const jsonData = sample.getJson();
+        console.log('Received data: ' + JSON.stringify(jsonData));
         data.push({
           x: jsonData.x,
           y: jsonData.y,
